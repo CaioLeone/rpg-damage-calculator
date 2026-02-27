@@ -68,13 +68,36 @@ func main() {
 		return
 	}
 
-	fmt.Println("Quantos dados voce deseja jogar?")
-	fmt.Scan(&quantidadeDado)
+	// fmt.Println("Quantos dados voce deseja jogar?")
+	// fmt.Scan(&quantidadeDado)
 	//VALIDAR QUANTIDADE DE DADOS
-	if quantidadeDado <= 0 {
-		fmt.Println("Quantidade invalida de dados!")
+	// if quantidadeDado <= 0 {
+	// 	fmt.Println("Quantidade invalida de dados!")
+	// 	return
+	// }
+
+	//ESCOLHA SUA CLASSE
+	fmt.Println("Escolha sua classe: warrior, mage, archer, bardBarian")
+	var choice string
+	fmt.Scan(&choice)
+	choice = strings.ToLower(choice)
+
+	var playerClass RPGClass
+	switch choice {
+	case "warrior":
+		playerClass = NewWarrior()
+	case "mage":
+		playerClass = NewMage()
+	case "archer":
+		playerClass = NewArcher()
+	case "bardbarian":
+		playerClass = NewBardBarian()
+	default:
+		fmt.Println("Classe invalida!")
 		return
 	}
+
+	quantidadeDado = playerClass.AttackDice()
 
 	fmt.Println("Qual dado voce deseja jogar? (ex: d4, d6, d8, d10, d12 d20, etc.)")
 	valorDado = strings.ToLower(valorDado)
