@@ -42,7 +42,7 @@ func NewArcher() RPGClass {
 	}
 }
 
-func NewBardBarbarian() RPGClass {
+func NewBardBarian() RPGClass {
 	return RPGClass{
 		Name:         "Bard/Barbarian",
 		Strength:     2,
@@ -143,5 +143,20 @@ func RollDice(numDice, diceSize int64) RollResult {
 	return RollResult{
 		Rolls: rolls,
 		Total: total,
+	}
+}
+
+func (c RPGClass) AttackDice() int64 {
+	switch c.Name {
+	case "Warrior":
+		return c.Strength
+	case "Mage":
+		return c.Intelligence
+	case "Archer":
+		return c.Dexterity
+	case "Bard/Barbarian":
+		return (c.Strength + c.Dexterity + c.Intelligence) / 3
+	default:
+		return 1 // Default attack dice value
 	}
 }
