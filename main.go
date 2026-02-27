@@ -8,10 +8,47 @@ import (
 	"strings"
 )
 
-type Class struct {
+type RPGClass struct {
+	Name         string
 	Strength     int64
 	Dexterity    int64
-	Constitution int64
+	Intelligence int64
+}
+
+func NewWarrior() RPGClass {
+	return RPGClass{
+		Name:         "Warrior",
+		Strength:     3,
+		Dexterity:    2,
+		Intelligence: 1,
+	}
+}
+
+func NewMage() RPGClass {
+	return RPGClass{
+		Name:         "Mage",
+		Strength:     1,
+		Dexterity:    2,
+		Intelligence: 3,
+	}
+}
+
+func NewArcher() RPGClass {
+	return RPGClass{
+		Name:         "Archer",
+		Strength:     2,
+		Dexterity:    3,
+		Intelligence: 1,
+	}
+}
+
+func NewBardBarbarian() RPGClass {
+	return RPGClass{
+		Name:         "Bard/Barbarian",
+		Strength:     2,
+		Dexterity:    2,
+		Intelligence: 2,
+	}
 }
 
 type RollResult struct {
