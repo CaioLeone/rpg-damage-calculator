@@ -46,7 +46,7 @@ go run main.go 5 d8 sim
 
 | Argumento | Descrição |
 |-----------|-----------|
-| Força | Número inteiro representando a força do personagem |
+| Classe | String representando a classe do personagem |
 | Arma | Tipo de dado: d4, d6, d8 ou d10 |
 | Crítico | `sim` ou `nao` |
 
