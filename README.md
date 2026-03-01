@@ -59,7 +59,7 @@ rpg-damage-calculator/
 ├── main.go
 ├── go.mod
 ├── data/
-│ └── weapons.json
+│ └── Dices.json
 └── README.md
 
 
@@ -69,7 +69,7 @@ rpg-damage-calculator/
 
 As armas são carregadas a partir de um arquivo JSON:
 
-`data/weapons.json`
+`data/Dices.json`
 
 Exemplo:
 
