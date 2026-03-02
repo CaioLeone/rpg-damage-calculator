@@ -188,6 +188,35 @@ func main() {
 		fmt.Printf(" Dado %d: %d\n", i+1, roll)
 	}
 	fmt.Printf(" Total: %d\n", result.Total)
+
+	fmt.Println("===============================================")
+	fmt.Println("TESTE DE ATRIBUTO")
+	fmt.Println("Qual atributo deseja testar? Strength, dexterity, intelligence")
+	var attrib string
+	fmt.Scan(&attrib)
+
+	fmt.Println("Qual a dificuldade do desafio? 1->20")
+	var diff int64
+	fmt.Scan(&diff)
+	if diff > 20 {
+		fmt.Println("Nao ha salvacao")
+	}
+
+	resultTest, success := playerClass.TestAttribute(attrib, 20, diff)
+
+	fmt.Println("Resultado dos dados: ")
+	for i, roll := range resultTest.Rolls {
+		fmt.Printf("Dado %d: %d\n", i+1, roll)
+	}
+
+	fmt.Println("Total: ", resultTest.Total)
+	if success {
+		fmt.Println("Sucesso no teste")
+	} else {
+		fmt.Println("Falhou no teste")
+	}
+	fmt.Println("===============================================")
+
 }
 
 func LoadFile(filename string) (map[string]int64, error) {
@@ -252,4 +281,24 @@ func (c RPGClass) AttackDice() int64 {
 	default:
 		return 1 // Default attack dice value
 	}
+}
+
+func (c RPGClass) TestAttribute(attibute string, diceSize int64, difficult int64) (RollResult, bool) {
+	var numDice int64
+
+	switch strings.ToLower(attibute) {
+	case "strength":
+		numDice = c.Strength
+	case "dexterity":
+		numDice = c.Dexterity
+	case "intelligence":
+		numDice = c.Intelligence
+	default:
+		numDice = 1
+	}
+
+	result := RollDice(numDice, diceSize)
+	success := result.Total >= difficult
+
+	return result, success
 }
