@@ -15,6 +15,66 @@ type RPGClass struct {
 	Intelligence int64
 }
 
+// Character interface defines the methods that any character class should implement
+type Character interface {
+	GetName() string
+	Attack(diceSize int64) RollResult
+}
+
+// Warrior struct represents the Warrior class and implements the Character interface
+type Warrior struct {
+	RPGClass
+}
+
+func (w Warrior) GetName() string {
+	return w.Name
+}
+
+func (w Warrior) Attack(diceSize int64) RollResult {
+	return RollDice(w.Strength, diceSize)
+}
+
+// Mage struct represents the Mage class and implements the Character interface
+type Mage struct {
+	RPGClass
+}
+
+func (m Mage) GetName() string {
+	return m.Name
+}
+
+func (m Mage) Attack(diceSize int64) RollResult {
+	return RollDice(m.Intelligence, diceSize)
+}
+
+// Archer struct represents the Archer class and implements the Character interface
+type Archer struct {
+	RPGClass
+}
+
+func (a Archer) GetName() string {
+	return a.Name
+}
+
+func (a Archer) Attack(diceSize int64) RollResult {
+	return RollDice(a.Dexterity, diceSize)
+}
+
+// BardBarbarian struct represents the Bard/Barbarian class and implements the Character interface
+type BardBarbarian struct {
+	RPGClass
+}
+
+func (bb BardBarbarian) GetName() string {
+	return bb.Name
+}
+
+func (bb BardBarbarian) Attack(diceSize int64) RollResult {
+	average := (bb.Strength + bb.Dexterity + bb.Intelligence) / 3
+	return RollDice(average, diceSize)
+}
+
+// Factory functions to create instances of each class
 func NewWarrior() RPGClass {
 	return RPGClass{
 		Name:         "Warrior",
@@ -60,6 +120,7 @@ func main() {
 
 	var quantidadeDado int64
 	var valorDado string
+	var player Character
 
 	//LER O ARQUIVO JSON
 	dices, err := LoadFile("dices.json")
@@ -68,6 +129,15 @@ func main() {
 		return
 	}
 
+	fmt.Println("Usando Interfaces e Structs para criar classes de RPG")
+	player = Warrior{NewWarrior()}
+	resultInterface := player.Attack(6)
+	fmt.Println("Classe: ", player.GetName())
+	fmt.Println("Total Dados: ", resultInterface.Total)
+	fmt.Println("Fim do uso de interfaces e structs")
+
+	fmt.Println("===============================================")
+	fmt.Println("Bem Vindo ao RPG Dice Roller!")
 	// fmt.Println("Quantos dados voce deseja jogar?")
 	// fmt.Scan(&quantidadeDado)
 	//VALIDAR QUANTIDADE DE DADOS
