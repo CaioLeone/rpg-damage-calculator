@@ -302,3 +302,9 @@ func (c RPGClass) TestAttribute(attibute string, diceSize int64, difficult int64
 
 	return result, success
 }
+
+func GameMenu(player Character, dices map[string]int64) {
+	for {
+		fmt.Println("======= Bem vindo ao RPG Dice Roler =======")
+	}
+}
