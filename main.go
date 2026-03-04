@@ -19,6 +19,7 @@ type RPGClass struct {
 type Character interface {
 	GetName() string
 	Attack(diceSize int64) RollResult
+	TestAttribute(attribute string, diceSize int64, difficulty int64) (RollResult, bool)
 }
 
 // Warrior struct represents the Warrior class and implements the Character interface
@@ -118,8 +119,8 @@ type RollResult struct {
 
 func main() {
 
-	var quantidadeDado int64
-	var valorDado string
+	//var quantidadeDado int64
+	//var valorDado string
 	var player Character
 
 	//LER O ARQUIVO JSON
@@ -129,93 +130,46 @@ func main() {
 		return
 	}
 
-	fmt.Println("Usando Interfaces e Structs para criar classes de RPG")
-	player = Warrior{NewWarrior()}
-	resultInterface := player.Attack(6)
-	fmt.Println("Classe: ", player.GetName())
-	fmt.Println("Total Dados: ", resultInterface.Total)
-	fmt.Println("Fim do uso de interfaces e structs")
-
-	fmt.Println("===============================================")
-	fmt.Println("Bem Vindo ao RPG Dice Roller!")
-	// fmt.Println("Quantos dados voce deseja jogar?")
-	// fmt.Scan(&quantidadeDado)
-	//VALIDAR QUANTIDADE DE DADOS
-	// if quantidadeDado <= 0 {
-	// 	fmt.Println("Quantidade invalida de dados!")
-	// 	return
-	// }
-
-	//ESCOLHA SUA CLASSE
+	// //ESCOLHA SUA CLASSE
 	fmt.Println("Escolha sua classe: warrior, mage, archer, bardBarian")
 	var choice string
 	fmt.Scan(&choice)
 	choice = strings.ToLower(choice)
 
-	var playerClass RPGClass
 	switch choice {
 	case "warrior":
-		playerClass = NewWarrior()
+		player = Warrior{NewWarrior()}
 	case "mage":
-		playerClass = NewMage()
+		player = Mage{NewMage()}
 	case "archer":
-		playerClass = NewArcher()
+		player = Archer{NewArcher()}
 	case "bardbarian":
-		playerClass = NewBardBarian()
+		player = BardBarbarian{NewBardBarian()}
 	default:
 		fmt.Println("Classe invalida!")
 		return
 	}
 
-	quantidadeDado = playerClass.AttackDice()
+	GameMenu(player, dices)
 
-	fmt.Println("Qual dado voce deseja jogar? (ex: d4, d6, d8, d10, d12 d20, etc.)")
-	valorDado = strings.ToLower(valorDado)
-	fmt.Scan(&valorDado)
+	// fmt.Println("Usando Interfaces e Structs para criar classes de RPG")
+	// player = Warrior{NewWarrior()}
+	// resultInterface := player.Attack(6)
+	// fmt.Println("Classe: ", player.GetName())
+	// fmt.Println("Total Dados: ", resultInterface.Total)
+	// fmt.Println("Fim do uso de interfaces e structs")
 
-	//OBTER VALOR DADO
-	diceValue, err := GetDice(valorDado, dices)
-	if err != nil {
-		fmt.Printf("Erro ao obter o valor do dado: %v\n", err)
-		return
-	}
-	//ROLAR DADO
-	result := RollDice(quantidadeDado, diceValue)
+	// fmt.Println("===============================================")
+	// fmt.Println("Bem Vindo ao RPG Dice Roller!")
+	// // fmt.Println("Quantos dados voce deseja jogar?")
+	// // fmt.Scan(&quantidadeDado)
+	// //VALIDAR QUANTIDADE DE DADOS
+	// // if quantidadeDado <= 0 {
+	// // 	fmt.Println("Quantidade invalida de dados!")
+	// // 	return
+	// // }
 
-	fmt.Printf("Resultados dos dados:\n")
-
-	for i, roll := range result.Rolls {
-		fmt.Printf(" Dado %d: %d\n", i+1, roll)
-	}
-	fmt.Printf(" Total: %d\n", result.Total)
-
-	fmt.Println("===============================================")
-	fmt.Println("TESTE DE ATRIBUTO")
-	fmt.Println("Qual atributo deseja testar? Strength, dexterity, intelligence")
-	var attrib string
-	fmt.Scan(&attrib)
-
-	fmt.Println("Qual a dificuldade do desafio? 1->20")
-	var diff int64
-	fmt.Scan(&diff)
-	if diff > 20 {
-		fmt.Println("Nao ha salvacao")
-	}
-
-	resultTest, success := playerClass.TestAttribute(attrib, 20, diff)
-
-	fmt.Println("Resultado dos dados: ")
-	for i, roll := range resultTest.Rolls {
-		fmt.Printf("Dado %d: %d\n", i+1, roll)
-	}
-
-	fmt.Println("Total: ", resultTest.Total)
-	if success {
-		fmt.Println("Sucesso no teste")
-	} else {
-		fmt.Println("Falhou no teste")
-	}
-	fmt.Println("===============================================")
+	//var playerClass RPGClass
 
 }
 
@@ -303,8 +257,103 @@ func (c RPGClass) TestAttribute(attibute string, diceSize int64, difficult int64
 	return result, success
 }
 
+func HandleAttack(player Character, dices map[string]int64) {
+	fmt.Println("Escolha o dado para ataque: D4, D6, D8, D10, D12")
+	var dice string
+	fmt.Scan(&dice)
+
+	diceValue, _ := GetDice(dice, dices)
+	result := player.Attack(diceValue)
+	fmt.Println("Ataque Total: ", result.Total)
+}
+
+func HandleAttributeTest(player Character, dices map[string]int64) {
+	fmt.Println("Escolhe o atributo que sera testado: Strength, Dexterity, Intelligence")
+	var atrib string
+	fmt.Scan(&atrib)
+
+	fmt.Println("Qual a dificuldade do desafio? 1->20")
+	var diff int64
+	fmt.Scan(&diff)
+	if diff < 1 {
+		diff = 1
+	}
+	if diff > 20 {
+		diff = 20
+	}
+
+	resultTest, success := player.TestAttribute(atrib, 20, diff)
+
+	fmt.Println("Resultado dos dados: ")
+	for i, roll := range resultTest.Rolls {
+		fmt.Printf("Dado %d: %d\n", i+1, roll)
+	}
+
+	fmt.Println("Total: ", resultTest.Total)
+	if success {
+		fmt.Println("Sucesso no teste")
+	} else {
+		fmt.Println("Falhou no teste")
+	}
+}
+
+func HandleDiceRoll(dices map[string]int64) {
+	fmt.Println("Quanto dados Deseja rolar?")
+	var diceAmount int64
+	fmt.Scan(&diceAmount)
+
+	if diceAmount <= 0 {
+		fmt.Println("Quantidade invalida")
+		return
+	}
+
+	fmt.Println("Qual dado voce deseja jogar? (ex: d4, d6, d8, d10, d12 d20, etc.)")
+	var dice string
+	fmt.Scan(&dice)
+
+	diceValue, err := GetDice(dice, dices)
+	if err != nil {
+		fmt.Printf("Erro ao obter o valor do dado: %v\n", err)
+		return
+	}
+	//ROLAR DADO
+	result := RollDice(diceAmount, diceValue)
+
+	fmt.Printf("Resultados dos dados:\n")
+
+	for i, roll := range result.Rolls {
+		fmt.Printf(" Dado %d: %d\n", i+1, roll)
+	}
+	fmt.Printf(" Total: %d\n", result.Total)
+
+}
+
 func GameMenu(player Character, dices map[string]int64) {
 	for {
 		fmt.Println("======= Bem vindo ao RPG Dice Roler =======")
+		fmt.Println("1 - Rolar Dado")
+		fmt.Println("2 - Atacar")
+		fmt.Println("3 - Teste de atributo")
+		fmt.Println("4 - Classe atual")
+		fmt.Println("0 - Sair")
+
+		var option int
+		fmt.Scan(&option)
+
+		switch option {
+		case 1:
+			HandleDiceRoll(dices)
+		case 2:
+			HandleAttack(player, dices)
+		case 3:
+			HandleAttributeTest(player, dices)
+		case 4:
+			fmt.Println("Classe atual: ", player.GetName())
+		case 0:
+			fmt.Println("Ate a proxima aventura...")
+			return
+		default:
+			fmt.Println("Opcao Invalida")
+		}
 	}
 }
