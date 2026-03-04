@@ -158,17 +158,6 @@ func main() {
 	// fmt.Println("Classe: ", player.GetName())
 	// fmt.Println("Total Dados: ", resultInterface.Total)
 	// fmt.Println("Fim do uso de interfaces e structs")
-
-	// fmt.Println("===============================================")
-	// fmt.Println("Bem Vindo ao RPG Dice Roller!")
-	// // fmt.Println("Quantos dados voce deseja jogar?")
-	// // fmt.Scan(&quantidadeDado)
-	// //VALIDAR QUANTIDADE DE DADOS
-	// // if quantidadeDado <= 0 {
-	// // 	fmt.Println("Quantidade invalida de dados!")
-	// // 	return
-	// // }
-
 	//var playerClass RPGClass
 
 }
