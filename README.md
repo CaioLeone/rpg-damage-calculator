@@ -15,19 +15,25 @@ O objetivo do projeto é treinar:
 
 ## 🎯 Funcionalidades
 
-O programa calcula o dano total de um ataque baseado em:
+1. O programa calcula o dano total de um ataque baseado em:
 
 - Força do personagem
 - Tipo de arma (d4, d6, d8, d10)
 - Se o ataque foi crítico
 
+2. O programa Realiza teste de atributos 
+ - De acordo com o nivel de dificuldade escolhido pelo usuario
+
+3. Realiza rolagens de dados
+ - Rolagem dos dados D4, D6, D8, D10, D12, D20 
+
 ### Fórmula de Dano
 
 Dano Base:
-rolagem_do_dado + força
+rolagem_do_dado * quantidade_de_dado
 
 Se for crítico:
-dano_total = dano_base * 2
+dano_total = rolagem_do_dado * 2
 
 ---
 
@@ -48,6 +54,7 @@ go run main.go 5 d8 sim
 |-----------|-----------|
 | Classe | String representando a classe do personagem |
 | Arma | Tipo de dado: d4, d6, d8 ou d10 |
+| Atributo | Strength, Dexterity, Intelligence |
 | Crítico | `sim` ou `nao` |
 
 ---
@@ -80,6 +87,8 @@ json
   "d6": 6,
   "d8": 8,
   "d10": 10
+  "d12": 12
+  "d20": 20
 }
 ```
 
